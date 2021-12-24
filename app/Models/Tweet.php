@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Tweet extends Model
+{
+    use HasFactory;
+    
+    protected $guarded = [
+    'id',
+    'created_at',
+    'updated_at',
+  ];
+  
+  public static function getAllOrderByUpdated_at()
+  {
+    return self::orderBy('updated_at', 'desc')->get();
+  }
+  
+  // 多対1の連携
+  //子のモデルにbelongsTo()を設定することで親のモデルを指定
+  //Tweet モデルは User モデルに属している状態
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
+  
+  
+  //TweetsモデルにUsersテーブルと多対多の連携をする
+  public function users()
+  {
+    return $this->belongsToMany(User::class)->withTimestamps();
+  }
+}
